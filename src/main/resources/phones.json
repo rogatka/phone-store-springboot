@@ -1,0 +1,17 @@
+[
+  {
+    "model": "SamsungS12",
+    "count": 115,
+    "price": 23113.13
+  },
+  {
+    "model": "AppleSE12",
+    "count": 15,
+    "price": 6565.43
+  },
+  {
+    "model": "HuaweiM12",
+    "count": 10,
+    "price": 665.43
+  }
+]

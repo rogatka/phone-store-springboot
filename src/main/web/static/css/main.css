@@ -1,0 +1,220 @@
+.users-spinner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.users-spinner-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3001;
+}
+
+.users-table,
+.account-table,
+.orders-table,
+.ordercards-table {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+.users-table-header,
+.ordercards-table-header,
+.account-table-header,
+.orders-table-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: gray;
+}
+
+.users-table-th,
+.ordercards-table-th,
+.account-table-th,
+.orders-table-th {
+    width: 200px;
+    font-size: 1.2rem;
+    background-color: gray;
+    text-align: center;
+}
+
+.users-table-td,
+.ordercards-table-td,
+.account-table-td,
+.orders-table-td {
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.users-table-content,
+.ordercards-table-content,
+.account-table-content,
+.orders-table-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.users-action-buttons,
+.ordercards-action-buttons,
+.account-action-buttons,
+.order-action-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.users-table-content-record,
+.ordercards-table-content-record,
+.account-table-content-record,
+.orders-table-content-record {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 5px;
+    width: 100%;
+    padding-bottom: 5px;
+    border-bottom: 1px solid black;
+}
+
+.full-screen-overlay {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3000;
+    background-color: rgba(100, 100, 100, 0.6);
+}
+
+.edit-user,
+.edit-ordercard,
+.edit-account {
+    background-color: white;
+    box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.6);
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.edit-user-field,
+.edit-ordercard-field,
+.edit-account-field {
+    background-color: white;
+    width: 200px;
+}
+
+.edit-user-wrapper,
+.edit-ordercard-wrapper,
+.edit-account-wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3002;
+}
+
+.edit-user-inner-wrapper,
+.edit-ordercard-inner-wrapper,
+.edit-account-inner-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.record-th {
+    width: 200px;
+    font-size: 1.2rem;
+    background-color: gray;
+    /*text-align: center;*/
+}
+
+.edit-field-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.display-none {
+    display: none;
+}
+
+.ordercard-phones-dropdown-wrapper {
+    /*display: none;*/
+    position: absolute;
+    top: 2.5rem;
+    background-color: white;
+    z-index: 3003;
+    width: 200px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px 3px rgba(0, 0, 0, 0.6);
+}
+
+.ordercard-phones-dropdown {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.ordercard-dropdown-phone {
+    user-select: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 3px;
+    text-align: center;
+}
+
+.ordercard-dropdown-phone:hover {
+    background-color: #0f6674;
+    border-radius: 4px;
+}
+
+.edit-ordercard-phone {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
