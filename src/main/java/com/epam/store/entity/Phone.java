@@ -17,7 +17,7 @@ public class Phone {
     @NotBlank
     private String model;
 
-    private String description;
+    private String description = "";
 
     @PositiveOrZero
     @NotNull

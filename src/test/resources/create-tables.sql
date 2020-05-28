@@ -10,7 +10,7 @@
 create table phones(
 id bigint auto_increment not null,
 model varchar(30) not null check (model != ''),
-description varchar(200) default '',
+description varchar(200) not null default '',
 phone_count bigint not null check (phone_count >= 0),
 price decimal(20,2) not null check(price >= 0),
 primary key (id));

@@ -5,6 +5,8 @@ import com.epam.store.service.PhoneService;
 import com.epam.store.utils.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ import java.util.Objects;
 @RequestMapping("/json")
 public class JsonController {
 
+    public static final String SUCCESS_MESSAGE = ">>>Deserialization From Json To Db: Success! <br> <p><a href='serialize'>Check result</a></p>";
+
     private PhoneService phoneService;
 
     public JsonController(PhoneService phoneService) {
@@ -28,17 +32,18 @@ public class JsonController {
     }
 
     @GetMapping("/serialize")
-    public @ResponseBody String serialize() throws JsonProcessingException {
+    public @ResponseBody String serializeToJsonFromDb() throws JsonProcessingException {
         List<Phone> phones = phoneService.findAll();
         return JsonParser.serialize(phones);
     }
 
     @GetMapping("/deserialize")
-    public void deserialize() throws IOException, URISyntaxException {
+    public ResponseEntity deserializeFromFileAndSaveToDb() throws IOException, URISyntaxException {
         URI resource = Objects.requireNonNull(this.getClass().getClassLoader().getResource("phones.json")).toURI();
         List<Phone> phones = JsonParser.deserializeFromFile(new File(resource), new TypeReference<List<Phone>>() {
         });
         phoneService.saveAll(phones);
+        return ResponseEntity.status(HttpStatus.OK).body(SUCCESS_MESSAGE);
     }
 
 }
