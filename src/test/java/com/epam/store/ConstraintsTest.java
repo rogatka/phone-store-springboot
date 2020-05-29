@@ -2,10 +2,7 @@ package com.epam.store;
 
 import com.epam.store.entity.*;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -24,7 +21,6 @@ public class ConstraintsTest {
     @BeforeAll
     public static void setUp() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
-//        validator = new LocalValidatorFactoryBean();
     }
 
     @Test

@@ -1,5 +1,5 @@
 #Phone Store
-# Spring-MVC 
+# SpringBoot
 
 Для тестирования работы приложения можно использовать файлы create-tables.sql, populate-tables.sql.
 Задать параметры для базы можно в файле /resources/persistence.properties 
@@ -37,6 +37,6 @@
 
 Написаны тесты. 
 
-P.S. Все кроме одного проходят. 
+P.S. Все кроме одного проходят (updateOrderShouldReturn200IfValid() в TestOrderController). 
 1 тест проходит только если убрать параметр orphanRemoval на поле List<OrderCard> orderCards в классе Order
 Но тогда не удаляются ordercards при попытке их удалить, хотя сумма заказа пересчитывается.

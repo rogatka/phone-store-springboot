@@ -3,6 +3,9 @@ package com.epam.store.service;
 import com.epam.store.dao.AccountDAO;
 import com.epam.store.dao.UserDAO;
 import com.epam.store.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -10,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
+@Service
 public class UserServiceImpl implements UserService {
 
     private static final String NAME_MUST_NOT_BE_NULL = "Name must not be null";
@@ -18,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     private AccountDAO accountDAO;
 
+    @Autowired
     public UserServiceImpl(UserDAO userDAO, AccountDAO accountDAO) {
         this.userDAO = userDAO;
         this.accountDAO = accountDAO;
@@ -35,12 +39,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         Objects.requireNonNull(user, USER_MUST_NOT_BE_NULL);
         return userDAO.save(user);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Objects.requireNonNull(id, ID_MUST_NOT_BE_NULL);
         Optional<Account> account = accountDAO.findByUserId(id);

@@ -7,6 +7,8 @@ import com.epam.store.entity.OrderCard;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.Phone;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
+@Service
 public class OrderCardServiceImpl implements OrderCardService {
     public static final String ORDER_CARD_MUST_NOT_BE_NULL = "Order card must not be null";
     public static final String ORDER_ID_MUST_NOT_BE_NULL = "Order id must not be null";
@@ -25,6 +27,7 @@ public class OrderCardServiceImpl implements OrderCardService {
     private OrderCardDAO orderCardDAO;
     private OrderDAO orderDAO;
 
+    @Autowired
     public OrderCardServiceImpl(OrderCardDAO orderCardDAO, OrderDAO orderDAO) {
         this.orderCardDAO = orderCardDAO;
         this.orderDAO = orderDAO;
@@ -59,12 +62,14 @@ public class OrderCardServiceImpl implements OrderCardService {
     }
 
     @Override
+    @Transactional
     public OrderCard save(OrderCard orderCard) {
         Objects.requireNonNull(orderCard, ORDER_CARD_MUST_NOT_BE_NULL);
         return orderCardDAO.save(orderCard);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Objects.requireNonNull(id, ID_MUST_NOT_BE_NULL);
         Optional<OrderCard> orderCardOptional = findById(id);

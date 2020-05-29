@@ -1,34 +1,24 @@
 package com.epam.store.dao;
 
+import com.epam.store.Main;
 import com.epam.store.config.TestJdbcConfig;
-import com.epam.store.entity.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.epam.store.entity.Order;
+import com.epam.store.entity.OrderCard;
+import com.epam.store.entity.OrderStatus;
+import com.epam.store.entity.Phone;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.EncodedResource;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-@ContextConfiguration(classes = {TestOrderCardDAO.TestOrderCardDAOConfig.class})
-@ExtendWith({SpringExtension.class})
-@TestPropertySource("classpath:test-persistence.properties")
+@SpringBootTest(classes = {
+        Main.class,
+        TestJdbcConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class TestOrderCardDAO {
 
     @Autowired
@@ -37,25 +27,6 @@ public class TestOrderCardDAO {
     private PhoneDAO phoneDAO;
     @Autowired
     private OrderDAO orderDAO;
-
-    @Autowired
-    private DataSource dataSource;
-
-    @BeforeEach
-    public void setup() throws SQLException {
-        ScriptUtils.executeSqlScript(dataSource.getConnection(),
-                new EncodedResource(new ClassPathResource("create-tables.sql"), StandardCharsets.UTF_8));
-        ScriptUtils.executeSqlScript(
-                dataSource.getConnection(),
-                new EncodedResource(new ClassPathResource("populate-tables.sql"), StandardCharsets.UTF_8));
-    }
-
-    @AfterEach
-    public void tearDown() throws SQLException {
-        ScriptUtils.executeSqlScript(
-                dataSource.getConnection(),
-                new EncodedResource(new ClassPathResource("drop-tables.sql"), StandardCharsets.UTF_8));
-    }
 
     @Test
     public void testFindAll() {
@@ -136,24 +107,5 @@ public class TestOrderCardDAO {
         orderCardDAO.deleteById(4L);
         orderCards = orderCardDAO.findAll();
         assertEquals(8, orderCards.size());
-    }
-
-    @Configuration
-    @Import({TestJdbcConfig.class})
-    static class TestOrderCardDAOConfig {
-        @Bean
-        public OrderCardDAO orderCardDAO(EntityManagerFactory entityManagerFactory) {
-            return new OrderCardDAOImpl(entityManagerFactory);
-        }
-
-        @Bean
-        public OrderDAO orderDAO(EntityManagerFactory entityManagerFactory) {
-            return new OrderDAOImpl(entityManagerFactory);
-        }
-
-        @Bean
-        public PhoneDAO phoneDAO(EntityManagerFactory entityManagerFactory) {
-            return new PhoneDAOImpl(entityManagerFactory);
-        }
     }
 }

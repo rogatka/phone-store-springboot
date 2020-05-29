@@ -1,7 +1,5 @@
 package com.epam.store.service;
 
-import com.epam.store.config.ConfigService;
-import com.epam.store.config.WebJavaConfig;
 import com.epam.store.dao.OrderCardDAO;
 import com.epam.store.dao.PhoneDAO;
 import com.epam.store.entity.Order;
@@ -10,24 +8,20 @@ import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.Phone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {ConfigService.class})
-@ExtendWith(SpringExtension.class)
-//@WebAppConfiguration
+@SpringBootTest
 public class TestPhoneService {
 
     @Mock

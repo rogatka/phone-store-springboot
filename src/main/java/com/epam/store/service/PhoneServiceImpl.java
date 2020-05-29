@@ -5,6 +5,9 @@ import com.epam.store.dao.PhoneDAO;
 import com.epam.store.entity.OrderCard;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.Phone;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
+@Service
 public class PhoneServiceImpl implements PhoneService {
     public static final String PHONE_MUST_NOT_BE_NULL = "Phone must not be null";
     public static final String MODEL_NAME_MUST_NOT_BE_NULL = "Model name must not be null";
@@ -21,6 +24,7 @@ public class PhoneServiceImpl implements PhoneService {
     private PhoneDAO phoneDAO;
     private OrderCardDAO orderCardDAO;
 
+    @Autowired
     public PhoneServiceImpl(PhoneDAO phoneDAO, OrderCardDAO orderCardDAO) {
         this.phoneDAO = phoneDAO;
         this.orderCardDAO = orderCardDAO;
@@ -44,18 +48,21 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
+    @Transactional
     public Phone save(Phone phone) {
         Objects.requireNonNull(phone, PHONE_MUST_NOT_BE_NULL);
         return phoneDAO.save(phone);
     }
 
     @Override
+    @Transactional
     public void saveAll(List<Phone> phoneList) {
         Objects.requireNonNull(phoneList, PHONE_LIST_MUST_NOT_BE_NULL);
         phoneDAO.saveAll(phoneList);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Objects.requireNonNull(id, ID_MUST_NOT_BE_NULL);
         List<OrderCard> orderCards = orderCardDAO.findAllByPhoneId(id);

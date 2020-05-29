@@ -2,50 +2,37 @@ package com.epam.store.dao;
 
 
 import com.epam.store.entity.Phone;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class PhoneDAOImpl implements PhoneDAO {
-    private EntityManagerFactory entityManagerFactory;
 
-    public PhoneDAOImpl(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<Phone> findAll() {
-        List<Phone> phones;
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<Phone> query = entityManager.createQuery("from Phone", Phone.class);
-        phones = query.getResultList();
-        entityManager.close();
-        return phones;
+        return query.getResultList();
     }
 
     @Override
-    public void saveAll(List<Phone> phoneList) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        try {
-            for (Phone phone: phoneList) {
-                entityManager.merge(phone);
-            }
-            transaction.commit();
-        } catch (IllegalArgumentException e) {
-            transaction.rollback();
-            throw new IllegalArgumentException(e);
-        } finally {
-            entityManager.close();
+    @Transactional
+    public void saveAll(Collection<Phone> phoneList) {
+        for (Phone phone : phoneList) {
+            entityManager.merge(phone);
         }
     }
 
     @Override
     public Optional<Phone> findByModelName(String modelName) {
-        Phone phone;
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         TypedQuery<Phone> query = entityManager.createQuery("from Phone where model like :modelName", Phone.class)
                 .setParameter("modelName", modelName.trim());
         List<Phone> phones = query.getResultList();
@@ -54,55 +41,30 @@ public class PhoneDAOImpl implements PhoneDAO {
         } else if (phones.size() > 1) {
             throw new RuntimeException("More than 1 phones with same model was found. Founded phones=" + phones.size() + ".Model name=" + modelName);
         }
-        entityManager.close();
         return Optional.of(phones.get(0));
     }
 
     @Override
     public Optional<Phone> findById(Long id) {
-        Phone phone;
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        phone = entityManager.find(Phone.class, id);
-        entityManager.close();
-        return Optional.ofNullable(phone);
+        return Optional.ofNullable(entityManager.find(Phone.class, id));
     }
 
     @Override
+    @Transactional
     public Phone save(Phone phone) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        try {
-            if (phone.getId() == null) {
-                entityManager.persist(phone);
-            } else {
-                phone = entityManager.merge(phone);
-            }
-            transaction.commit();
-            return phone;
-        } catch (EntityExistsException|IllegalArgumentException e) {
-            transaction.rollback();
-            throw new IllegalArgumentException(e);
-        } finally {
-            entityManager.close();
+        if (phone.getId() == null) {
+            entityManager.persist(phone);
+        } else {
+            phone = entityManager.merge(phone);
         }
+        return phone;
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
         Query query = entityManager.createQuery("delete from Phone where id=:id")
                 .setParameter("id", id);
-        transaction.begin();
-        try {
-            query.executeUpdate();
-            transaction.commit();
-        } catch (RuntimeException e) {
-            transaction.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            entityManager.close();
-        }
+        query.executeUpdate();
     }
 }

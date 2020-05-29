@@ -1,44 +1,34 @@
 package com.epam.store.service;
 
-import com.epam.store.config.ConfigService;
-import com.epam.store.config.WebJavaConfig;
-import com.epam.store.dao.*;
+import com.epam.store.dao.OrderCardDAO;
+import com.epam.store.dao.OrderDAO;
+import com.epam.store.dao.PhoneDAO;
 import com.epam.store.entity.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {ConfigService.class})
-@ExtendWith(SpringExtension.class)
-//@WebAppConfiguration
+@SpringBootTest
 public class TestOrderService {
 
     @Mock
     private OrderDAO orderDAO;
+
+    @Mock
+    private PhoneDAO phoneDAO;
 
     @Mock
     private OrderCardDAO orderCardDAO;
@@ -141,9 +131,11 @@ public class TestOrderService {
         orderCard.setPhone(phone);
         orderCard.setItemCount(1000L);
         when(orderCardDAO.findAllByOrderId(any())).thenReturn(Collections.singletonList(orderCard));
+        when(phoneDAO.findById(any())).thenReturn(Optional.of(phone));
         Order order = new Order();
         order.setId(1L);
         order.setStatus(OrderStatus.NOT_STARTED);
+        orderCard.setOrder(order);
         when(orderDAO.findById(anyLong())).thenReturn(Optional.of(order));
         assertThatThrownBy(() ->
                 orderService.addOrderCard(order.getId(), orderCard))

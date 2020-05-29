@@ -1,61 +1,27 @@
 package com.epam.store.dao;
 
+import com.epam.store.Main;
 import com.epam.store.config.TestJdbcConfig;
 import com.epam.store.entity.User;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.EncodedResource;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-@ContextConfiguration(classes = {TestUserDAO.TestUserDAOConfig.class})
-@ExtendWith({SpringExtension.class})   // this is replace to @RunWith(SpringJunit4ClassRunner.class)
-@TestPropertySource("classpath:test-persistence.properties")
+@SpringBootTest(classes = {
+        Main.class,
+        TestJdbcConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class TestUserDAO {
 
     @Autowired
     private UserDAO userDAO;
-
-    @Autowired
-    private DataSource dataSource;
-
-
-    @BeforeEach
-    public void setup() throws SQLException {
-        ScriptUtils.executeSqlScript(dataSource.getConnection(),
-                        new EncodedResource(new ClassPathResource("create-tables.sql"), StandardCharsets.UTF_8));
-        ScriptUtils.executeSqlScript(
-                        dataSource.getConnection(),
-                        new EncodedResource(new ClassPathResource("populate-tables.sql"), StandardCharsets.UTF_8));
-    }
-
-    @AfterEach
-    public void tearDown() throws SQLException {
-        ScriptUtils.executeSqlScript(
-                dataSource.getConnection(),
-                new EncodedResource(new ClassPathResource("drop-tables.sql"), StandardCharsets.UTF_8));
-    }
 
     @Test
     public void testFindAll() {
@@ -117,14 +83,5 @@ public class TestUserDAO {
         users = userDAO.findAll();
         assertEquals(2, users.size());
         assertFalse(userDAO.findById(3L).isPresent());
-    }
-
-    @Configuration
-    @Import({TestJdbcConfig.class})
-    static class TestUserDAOConfig {
-        @Bean
-        public UserDAO userDAO(EntityManagerFactory entityManagerFactory) {
-            return new UserDAOImpl(entityManagerFactory);
-        }
     }
 }

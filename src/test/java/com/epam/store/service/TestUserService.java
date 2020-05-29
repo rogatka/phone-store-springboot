@@ -1,34 +1,21 @@
 package com.epam.store.service;
 
-import com.epam.store.config.ConfigService;
-import com.epam.store.config.TestJdbcConfig;
-import com.epam.store.config.WebJavaConfig;
 import com.epam.store.dao.AccountDAO;
-import com.epam.store.dao.UserDAO;
 import com.epam.store.entity.Account;
-import com.epam.store.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {ConfigService.class})
-@ExtendWith(SpringExtension.class)
-//@WebAppConfiguration
+@SpringBootTest
 public class TestUserService {
 
     @Mock

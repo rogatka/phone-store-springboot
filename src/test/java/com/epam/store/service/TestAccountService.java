@@ -1,43 +1,22 @@
 package com.epam.store.service;
 
-import com.epam.store.config.ConfigService;
-import com.epam.store.config.WebJavaConfig;
-import com.epam.store.dao.AccountDAO;
 import com.epam.store.dao.OrderDAO;
-import com.epam.store.entity.Account;
 import com.epam.store.entity.Order;
 import com.epam.store.entity.OrderStatus;
-import com.epam.store.entity.User;
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validator;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {ConfigService.class})
-@ExtendWith(SpringExtension.class)
-//@WebAppConfiguration
+@SpringBootTest
 public class TestAccountService {
     @Mock
     private OrderDAO orderDAO;
