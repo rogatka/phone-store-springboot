@@ -5,16 +5,12 @@ import com.epam.store.dao.PhoneDAO;
 import com.epam.store.entity.OrderCard;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.Phone;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 @Service
 public class PhoneServiceImpl implements PhoneService {
     public static final String PHONE_MUST_NOT_BE_NULL = "Phone must not be null";
@@ -24,7 +20,6 @@ public class PhoneServiceImpl implements PhoneService {
     private PhoneDAO phoneDAO;
     private OrderCardDAO orderCardDAO;
 
-    @Autowired
     public PhoneServiceImpl(PhoneDAO phoneDAO, OrderCardDAO orderCardDAO) {
         this.phoneDAO = phoneDAO;
         this.orderCardDAO = orderCardDAO;
@@ -65,14 +60,18 @@ public class PhoneServiceImpl implements PhoneService {
     @Transactional
     public void deleteById(Long id) {
         Objects.requireNonNull(id, ID_MUST_NOT_BE_NULL);
-        List<OrderCard> orderCards = orderCardDAO.findAllByPhoneId(id);
+        checkOrdersStatus(id);
+        phoneDAO.deleteById(id);
+    }
+
+    private void checkOrdersStatus(Long phoneId) {
+        List<OrderCard> orderCards = orderCardDAO.findAllByPhoneId(phoneId);
         if (!orderCards.isEmpty()) {
             for (OrderCard orderCard : orderCards) {
                 if (orderCard.getOrder().getStatus() == OrderStatus.PROCESSING) {
-                    throw new IllegalArgumentException(String.format("Cannot delete phone with id=%d because there is processing order(id=%d) with that phone", id, orderCard.getOrder().getId()));
+                    throw new IllegalArgumentException(String.format("Cannot delete phone with id=%d because there is processing order(id=%d) with that phone", phoneId, orderCard.getOrder().getId()));
                 }
             }
         }
-        phoneDAO.deleteById(id);
     }
 }

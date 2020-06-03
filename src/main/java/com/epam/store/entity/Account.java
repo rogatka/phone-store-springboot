@@ -51,7 +51,12 @@ public class Account {
     }
 
     public void setOrders(List<Order> orders) {
-        this.orders = orders;
+        if (this.orders == null) {
+            this.orders = orders;
+        } else {
+            this.orders.clear();
+            this.orders.addAll(orders);
+        }
     }
 
     public BigDecimal getAmount() {
@@ -67,14 +72,12 @@ public class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Objects.equals(id, account.id) &&
-                Objects.equals(user, account.user) &&
-                Objects.equals(amount, account.amount);
+        return Objects.equals(id, account.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, amount);
+        return Objects.hash(id);
     }
 
     @Override

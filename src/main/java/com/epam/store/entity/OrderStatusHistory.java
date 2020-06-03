@@ -1,13 +1,10 @@
 package com.epam.store.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -72,15 +69,12 @@ public class OrderStatusHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderStatusHistory that = (OrderStatusHistory) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(order, that.order) &&
-                orderStatus == that.orderStatus &&
-                Objects.equals(timeStamp, that.timeStamp);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, order, orderStatus, timeStamp);
+        return Objects.hash(id);
     }
 
     @Override

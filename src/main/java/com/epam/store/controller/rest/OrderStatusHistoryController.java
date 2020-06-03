@@ -4,6 +4,7 @@ import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.OrderStatusHistory;
 import com.epam.store.service.OrderStatusHistoryService;
 import javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @RequestMapping(path = "orderStatusHistories")
 public class OrderStatusHistoryController {
     private OrderStatusHistoryService orderStatusHistoryService;
-
+    @Autowired
     public OrderStatusHistoryController(OrderStatusHistoryService orderStatusHistoryService) {
         this.orderStatusHistoryService = orderStatusHistoryService;
     }

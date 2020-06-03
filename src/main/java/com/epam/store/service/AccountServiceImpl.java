@@ -5,7 +5,7 @@ import com.epam.store.dao.OrderDAO;
 import com.epam.store.entity.Account;
 import com.epam.store.entity.Order;
 import com.epam.store.entity.OrderStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.epam.store.exception.OrderStatusException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,6 @@ public class AccountServiceImpl implements AccountService {
     private AccountDAO accountDAO;
     private OrderDAO orderDAO;
 
-    @Autowired
     public AccountServiceImpl(AccountDAO accountDAO, OrderDAO orderDAO) {
         this.accountDAO = accountDAO;
         this.orderDAO = orderDAO;
@@ -56,14 +55,18 @@ public class AccountServiceImpl implements AccountService {
         Objects.requireNonNull(id, ID_MUST_NOT_BE_NULL);
         List<Order> orders = orderDAO.findAllByAccountId(id);
         if (!orders.isEmpty()) {
-            for (Order order: orders) {
-                if (order.getStatus() == OrderStatus.PROCESSING) {
-                    throw new IllegalArgumentException(String.format("Cannot delete account with id=%d because there is processing order(id=%d) with that account", id, order.getId()));
-                } else if (order.getStatus() == OrderStatus.NOT_STARTED) {
-                    throw new IllegalArgumentException(String.format("Cannot delete account with id=%d. Please first manually delete not started orders", id));
-                }
-            }
+            checkOrders(id, orders);
         }
         accountDAO.deleteById(id);
+    }
+
+    private void checkOrders(Long accountId, List<Order> orders) {
+        for (Order order: orders) {
+            if (order.getStatus() == OrderStatus.PROCESSING) {
+                throw new OrderStatusException(String.format("Cannot delete account with id=%d because there is processing order(id=%d) with that account", accountId, order.getId()));
+            } else if (order.getStatus() == OrderStatus.NOT_STARTED) {
+                throw new OrderStatusException(String.format("Cannot delete account with id=%d. Please first manually delete not started orders", accountId));
+            }
+        }
     }
 }

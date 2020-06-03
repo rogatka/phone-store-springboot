@@ -2,17 +2,14 @@ package com.epam.store.service;
 
 import com.epam.store.dao.AccountDAO;
 import com.epam.store.dao.UserDAO;
-import com.epam.store.entity.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.epam.store.entity.Account;
+import com.epam.store.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -21,7 +18,6 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     private AccountDAO accountDAO;
 
-    @Autowired
     public UserServiceImpl(UserDAO userDAO, AccountDAO accountDAO) {
         this.userDAO = userDAO;
         this.accountDAO = accountDAO;
@@ -51,7 +47,7 @@ public class UserServiceImpl implements UserService {
         Objects.requireNonNull(id, ID_MUST_NOT_BE_NULL);
         Optional<Account> account = accountDAO.findByUserId(id);
         if (account.isPresent()) {
-            throw new IllegalArgumentException(String.format("Cannot delete user with id=%d because there is account with id=%d referenced that user", id, account.get().getId()));
+            throw new IllegalArgumentException(String.format("Cannot delete user with id=%d because there is account with id=%d which referenced to that user", id, account.get().getId()));
         }
         userDAO.deleteById(id);
     }

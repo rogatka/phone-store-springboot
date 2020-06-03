@@ -26,7 +26,6 @@ public class TestOrderService {
 
     @Mock
     private OrderDAO orderDAO;
-
     @Mock
     private PhoneDAO phoneDAO;
 
@@ -92,7 +91,7 @@ public class TestOrderService {
         assertThatThrownBy(() ->
                 orderService.save(order))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageStartingWith("New order");
+                .hasMessageStartingWith("Just created order");
     }
 
     @Test
@@ -138,7 +137,7 @@ public class TestOrderService {
         orderCard.setOrder(order);
         when(orderDAO.findById(anyLong())).thenReturn(Optional.of(order));
         assertThatThrownBy(() ->
-                orderService.addOrderCard(order.getId(), orderCard))
+                orderService.saveOrderCard(order.getId(), orderCard))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageStartingWith("Item count");
     }
@@ -160,6 +159,7 @@ public class TestOrderService {
         account.setAmount(BigDecimal.valueOf(10));
         order.setAccount(account);
         order.setTotalSum(phone.getPrice().add(BigDecimal.valueOf(orderCard.getItemCount())));
+        when(orderDAO.findById(anyLong())).thenReturn(Optional.of(order));
         assertThatThrownBy(() ->
                 orderService.save(order))
                 .isInstanceOf(RuntimeException.class)

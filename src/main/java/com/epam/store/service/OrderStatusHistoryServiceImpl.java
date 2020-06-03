@@ -1,20 +1,15 @@
 package com.epam.store.service;
 
 import com.epam.store.dao.OrderStatusHistoryDAO;
-import com.epam.store.entity.Order;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.OrderStatusHistory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 @Service
 public class OrderStatusHistoryServiceImpl implements OrderStatusHistoryService {
     public static final String ORDER_ID_MUST_NOT_BE_NULL = "Order id must not be null";
@@ -24,7 +19,6 @@ public class OrderStatusHistoryServiceImpl implements OrderStatusHistoryService 
 
     private OrderStatusHistoryDAO orderStatusHistoryDAO;
 
-    @Autowired
     public OrderStatusHistoryServiceImpl(OrderStatusHistoryDAO orderStatusHistoryDAO) {
         this.orderStatusHistoryDAO = orderStatusHistoryDAO;
     }

@@ -5,6 +5,7 @@ import com.epam.store.service.PhoneService;
 import com.epam.store.utils.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ public class JsonController {
     public static final String SUCCESS_MESSAGE = ">>>Deserialization From Json To Db: Success! <br> <p><a href='serialize'>Check result</a></p>";
 
     private PhoneService phoneService;
-
+    @Autowired
     public JsonController(PhoneService phoneService) {
         this.phoneService = phoneService;
     }

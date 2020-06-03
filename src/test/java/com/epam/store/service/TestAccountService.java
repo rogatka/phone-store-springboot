@@ -3,6 +3,7 @@ package com.epam.store.service;
 import com.epam.store.dao.OrderDAO;
 import com.epam.store.entity.Order;
 import com.epam.store.entity.OrderStatus;
+import com.epam.store.exception.OrderStatusException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -60,7 +61,7 @@ public class TestAccountService {
         when(orderDAO.findAllByAccountId(anyLong())).thenReturn(Collections.singletonList(order));
         assertThatThrownBy(() ->
                 accountService.deleteById(anyLong()))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(OrderStatusException.class)
                 .hasMessageStartingWith("Cannot delete account");
     }
 

@@ -30,7 +30,17 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public Optional<Order> findById(Long id) {
-        return Optional.ofNullable(entityManager.find(Order.class, id));
+        List<Order> orders;
+        Optional<Order> order;
+        Query query = entityManager.createQuery("select o from Order o LEFT join fetch o.orderCards oc where o.id=:id")
+                .setParameter("id", id);
+        orders = query.getResultList();
+        if (orders.isEmpty()) {
+            order = Optional.empty();
+        } else {
+            order = Optional.of(orders.get(0));
+        }
+        return order;
     }
 
     @Override

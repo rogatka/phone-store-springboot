@@ -4,6 +4,7 @@ import com.epam.store.entity.Order;
 import com.epam.store.entity.OrderCard;
 import com.epam.store.service.OrderService;
 import javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @RequestMapping(path = "orders")
 public class OrderController {
     private OrderService orderService;
-
+    @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
@@ -58,7 +59,7 @@ public class OrderController {
     @PostMapping("/{id}/add")
     public void addOrderCard(@RequestBody OrderCard orderCard, @PathVariable Long id) throws NotFoundException {
         if (orderService.findById(id).isPresent()) {
-            orderService.addOrderCard(id, orderCard);
+            orderService.saveOrderCard(id, orderCard);
         } else {
             throw new NotFoundException("order with id = " + id + " not exist");
         }

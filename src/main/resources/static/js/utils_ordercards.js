@@ -170,6 +170,7 @@
 
     orderCardUtils.ajax.getPhones = function () {
         orderCardUtils.spinner.showSpinner();
+        orderCardUtils.store.phones = [];
         return window.axios
             .get(this.phonesUrl)
             .then((response) => {
@@ -206,6 +207,7 @@
 
     orderCardUtils.ajax.getOrderCardsByOrderId = function () {
         orderCardUtils.spinner.showSpinner();
+        orderCardUtils.store.orderCards = [];
         return window.axios
             .get(`${this.ordercardsUrl}/order/${orderCardUtils.store.order.id}`)
             .then((response) => {
@@ -255,6 +257,7 @@
 
     orderCardUtils.orderCard = {};
     orderCardUtils.orderCard.refreshTable = function () {
+        orderCardUtils.ajax.getPhones();
         orderCardUtils.ajax.getOrderById().then((data) => {
             orderCardUtils.ajax.getOrderCardsByOrderId().then((data) => {
                 orderCardUtils.orderCard.cleanTable();
@@ -271,8 +274,8 @@
         orderCardUtils.spinner.showSpinner();
         orderCardUtils.ajax.deleteOrderCard(orderCard.id)
             .then((response) => {
-                orderCardUtils.spinner.hideSpinner();
                 orderCardUtils.orderCard.refreshTable();
+                orderCardUtils.spinner.hideSpinner();
             })
             .catch((err) => {
                 console.error(err);
@@ -337,7 +340,6 @@
     };
 
     orderCardUtils.phone = {};
-    //создает локацию исходя из переданного имени???
     orderCardUtils.phone.createDropDownElement = function createPhone(model) {
         const phone = document.createElement('div');
         phone.classList.add('ordercards-dropdown-phone');

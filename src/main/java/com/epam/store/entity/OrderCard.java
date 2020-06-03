@@ -1,11 +1,8 @@
 package com.epam.store.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +16,7 @@ public class OrderCard {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "phone_id")
     @NotNull
     private Phone phone;
@@ -66,15 +63,12 @@ public class OrderCard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderCard orderCard = (OrderCard) o;
-        return Objects.equals(id, orderCard.id) &&
-                Objects.equals(order, orderCard.order) &&
-                Objects.equals(phone, orderCard.phone) &&
-                Objects.equals(itemCount, orderCard.itemCount);
+        return Objects.equals(id, orderCard.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, order, phone, itemCount);
+        return Objects.hash(id);
     }
 
     @Override
