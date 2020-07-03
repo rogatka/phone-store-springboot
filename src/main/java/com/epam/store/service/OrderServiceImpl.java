@@ -6,6 +6,7 @@ import com.epam.store.dao.OrderStatusHistoryDAO;
 import com.epam.store.dao.PhoneDAO;
 import com.epam.store.entity.*;
 import com.epam.store.exception.OrderStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private PhoneDAO phoneDAO;
     private OrderStatusHistoryDAO orderStatusHistoryDAO;
     private OrderCardDAO orderCardDAO;
-
+    @Autowired
     public OrderServiceImpl(OrderDAO orderDAO, PhoneDAO phoneDAO, OrderStatusHistoryDAO orderStatusHistoryDAO, OrderCardDAO orderCardDAO) {
         this.orderDAO = orderDAO;
         this.phoneDAO = phoneDAO;
@@ -157,12 +158,12 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderDAO.findById(orderId).get();
         Long orderCardId = orderCard.getId();
         checkOrderStatus(order, orderCardId);
-        List<OrderCard> orderCards = order.getOrderCards();
         if (orderCardId == null) {
             addOrderCard(orderCard, order);
         } else {
             updateOrderCard(orderCard, order);
         }
+        orderDAO.save(order);
     }
 
     private void updateOrderCard(OrderCard orderCard, Order order) {
@@ -197,7 +198,6 @@ public class OrderServiceImpl implements OrderService {
                     .filter((oc) -> oc.getPhone().getId().equals(newPhone.getId()))
                     .forEach((oc) -> oc.setPhone(newPhone));
             order.setTotalSum(calculateOrderCardsTotalSum(orderCards));
-            orderDAO.save(order);
         } else {
             throw new IllegalArgumentException("Order card with id =" + orderCard.getId() + "is not found");
         }
@@ -217,7 +217,6 @@ public class OrderServiceImpl implements OrderService {
                 .forEach((oc) -> oc.setPhone(phone));
         orderCards.add(orderCard);
         order.setTotalSum(calculateOrderCardsTotalSum(orderCards));
-        orderDAO.save(order);
     }
 
     private void checkOrderStatus(Order order, Long orderCardId) {

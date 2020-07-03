@@ -6,6 +6,7 @@ import com.epam.store.entity.Account;
 import com.epam.store.entity.Order;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.exception.OrderStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ public class AccountServiceImpl implements AccountService {
     public static final String USER_ID_MUST_NOT_BE_NULL = "User id must not be null";
     private AccountDAO accountDAO;
     private OrderDAO orderDAO;
-
+    @Autowired
     public AccountServiceImpl(AccountDAO accountDAO, OrderDAO orderDAO) {
         this.accountDAO = accountDAO;
         this.orderDAO = orderDAO;

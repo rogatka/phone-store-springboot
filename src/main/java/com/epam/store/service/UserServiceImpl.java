@@ -4,6 +4,7 @@ import com.epam.store.dao.AccountDAO;
 import com.epam.store.dao.UserDAO;
 import com.epam.store.entity.Account;
 import com.epam.store.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private static final String USER_MUST_NOT_BE_NULL = "User must not be null";
     private UserDAO userDAO;
     private AccountDAO accountDAO;
-
+    @Autowired
     public UserServiceImpl(UserDAO userDAO, AccountDAO accountDAO) {
         this.userDAO = userDAO;
         this.accountDAO = accountDAO;

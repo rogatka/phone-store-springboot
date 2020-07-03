@@ -5,6 +5,7 @@ import com.epam.store.dao.PhoneDAO;
 import com.epam.store.entity.OrderCard;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.entity.Phone;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ public class PhoneServiceImpl implements PhoneService {
 
     private PhoneDAO phoneDAO;
     private OrderCardDAO orderCardDAO;
-
+    @Autowired
     public PhoneServiceImpl(PhoneDAO phoneDAO, OrderCardDAO orderCardDAO) {
         this.phoneDAO = phoneDAO;
         this.orderCardDAO = orderCardDAO;

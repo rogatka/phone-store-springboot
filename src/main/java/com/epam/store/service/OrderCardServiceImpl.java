@@ -5,6 +5,7 @@ import com.epam.store.dao.OrderDAO;
 import com.epam.store.entity.OrderCard;
 import com.epam.store.entity.OrderStatus;
 import com.epam.store.exception.OrderStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ public class OrderCardServiceImpl implements OrderCardService {
 
     private OrderCardDAO orderCardDAO;
     private OrderDAO orderDAO;
-
+    @Autowired
     public OrderCardServiceImpl(OrderCardDAO orderCardDAO, OrderDAO orderDAO) {
         this.orderCardDAO = orderCardDAO;
         this.orderDAO = orderDAO;
